@@ -10,7 +10,7 @@
  * 2019-02-01     yuneizhilin  fix the stm32_adc_init function initialization issue
  * 2020-06-17     thread-liu   Porting for stm32mp1xx
  * 2020-10-14     Dozingfiretruck   Porting for stm32wbxx
- * 2022-05-22     Stanley Lwin  stm32_adc_get_vref
+ * 2022-05-22     Stanley Lwin stm32_adc_get_vref and stm32_adc_set_vre
  */
 
 #include <board.h>
@@ -177,6 +177,11 @@ static rt_uint16_t stm32_adc_get_vref (struct rt_adc_device *device)
     return 3300;
 }
 
+static rt_uint16_t stm32_adc_set_vref(struct rt_adc_device *device, rt_uint16_t voltage)
+{
+    return -RT_ERROR;
+}
+
 static rt_err_t stm32_adc_get_value(struct rt_adc_device *device, rt_uint32_t channel, rt_uint32_t *value)
 {
     ADC_ChannelConfTypeDef ADC_ChanConf;
@@ -293,6 +298,7 @@ static const struct rt_adc_ops stm_adc_ops =
     .convert = stm32_adc_get_value,
     .get_resolution = stm32_adc_get_resolution,
     .get_vref = stm32_adc_get_vref,
+    .set_vref = stm32_adc_set_vref,
 };
 
 static int stm32_adc_init(void)

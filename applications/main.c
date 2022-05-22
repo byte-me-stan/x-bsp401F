@@ -10,9 +10,18 @@
  */
 
 #include <rtthread.h>
-
+#include <rtdevice.h>
 int main(void)
 {
+    rt_adc_device_t adc_dev;
+    rt_uint16_t voltage = 0.0;
+
+
+    adc_dev = (rt_adc_device_t)rt_device_find("adc1");
+
+    voltage =  rt_device_control((rt_device_t)adc_dev, RT_ADC_CMD_GET_VREF,RT_NULL);
+
+    rt_kprintf("voltage ---> %d\n", voltage);
 //    while (1)
 //    {
 //        rt_kprintf("Hello RT-Thread!\n");

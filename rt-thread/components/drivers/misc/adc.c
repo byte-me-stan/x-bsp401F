@@ -67,8 +67,13 @@ static rt_err_t _adc_control(rt_device_t dev, int cmd, void *args)
     else if (cmd == RT_ADC_CMD_GET_VREF)
     {
         result = adc->ops->get_vref(adc);
+        //convert to 2 decimal digits
     }
-
+    else if (cmd == RT_ADC_CMD_SET_VREF)
+    {
+        result = adc->ops->set_vref(adc, RT_NULL);
+        //convert to 2 decimal digits
+    }
     return result;
 }
 
@@ -167,7 +172,7 @@ rt_uint32_t rt_adc_voltage(rt_adc_device_t dev, rt_uint32_t channel)
     /*read the value and convert to voltage*/
     if (dev->ops->get_resolution != RT_NULL && dev->ops->convert != RT_NULL)
     {
-        /*get vref*/
+        /*get vref - convert to 3 decimal place for more accuracy*/
         vref = _adc_control((rt_device_t)dev, RT_ADC_CMD_GET_VREF, RT_NULL);
 
         /*get the convert bits*/
@@ -253,7 +258,7 @@ static int adc(int argc, char **argv)
                 {
                     voltage = rt_adc_voltage(adc_device, atoi(argv[2]));
                     result_str = (result == RT_EOK) ? "success" : "failure";
-                    rt_kprintf("%s channel %d voltage is %d.%03d \n", adc_device->parent.parent.name, atoi(argv[2]), voltage / 1000, voltage % 1000);
+                    rt_kprintf("%s channel %d voltage is %d.%03dV \n", adc_device->parent.parent.name, atoi(argv[2]), voltage / 1000, voltage % 1000);
                 }
                 else
                 {
