@@ -170,11 +170,11 @@ static rt_uint32_t stm32_adc_get_channel(rt_uint32_t channel)
     return stm32_channel;
 }
 
-static rt_uint16_t stm32_adc_get_vref (struct rt_adc_device *device)
-{
-    RT_ASSERT(device);
-    return 330;
-}
+//static rt_uint16_t stm32_adc_get_vref (struct rt_adc_device *device)
+//{
+//    RT_ASSERT(device);
+//    return 330;
+//}
 
 static rt_err_t stm32_adc_get_value(struct rt_adc_device *device, rt_uint32_t channel, rt_uint32_t *value)
 {
@@ -291,7 +291,7 @@ static const struct rt_adc_ops stm_adc_ops =
     .enabled = stm32_adc_enabled,
     .convert = stm32_adc_get_value,
     .get_resolution = stm32_adc_get_resolution,
-    .get_vref = stm32_adc_get_vref,
+//    .get_vref = stm32_adc_get_vref,
 };
 
 static int stm32_adc_init(void)

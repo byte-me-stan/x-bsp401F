@@ -64,10 +64,10 @@ static rt_err_t _adc_control(rt_device_t dev, int cmd, void *args)
             result = RT_EOK;
         }
     }
-    else if (cmd == RT_ADC_CMD_GET_VREF)
-    {
-        result = adc->ops->get_vref(adc);
-    }
+//    else if (cmd == RT_ADC_CMD_GET_VREF)
+//    {
+//        result = adc->ops->get_vref(adc);
+//    }
 
     return result;
 }
@@ -169,7 +169,7 @@ rt_uint32_t rt_adc_voltage(rt_adc_device_t dev, rt_uint32_t channel)
     if (dev->ops->get_resolution != RT_NULL && dev->ops->convert != RT_NULL)
     {
         /*get vref*/
-       _adc_control((rt_device_t)dev, RT_ADC_CMD_GET_VREF, RT_NULL);
+//       _adc_control((rt_device_t)dev, RT_ADC_CMD_GET_VREF, RT_NULL);
 
         /*get the convert bits*/
         rt_uint8_t resolution = dev->ops->get_resolution(dev);
