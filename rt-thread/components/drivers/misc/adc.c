@@ -64,10 +64,10 @@ static rt_err_t _adc_control(rt_device_t dev, int cmd, void *args)
             result = RT_EOK;
         }
     }
-//    else if (cmd == RT_ADC_CMD_GET_VREF)
-//    {
-//        result = adc->ops->get_vref(adc);
-//    }
+    else if (cmd == RT_ADC_CMD_GET_VREF)
+    {
+        result = adc->ops->get_vref(adc);
+    }
 
     return result;
 }
@@ -160,8 +160,7 @@ rt_err_t rt_adc_disable(rt_adc_device_t dev, rt_uint32_t channel)
 
 rt_uint32_t rt_adc_voltage(rt_adc_device_t dev, rt_uint32_t channel)
 {
-    rt_uint32_t value = 0, voltage = 0;
-
+    rt_uint32_t value = 0, voltage = 0, vref = 0;
 
     RT_ASSERT(dev);
 
@@ -169,12 +168,12 @@ rt_uint32_t rt_adc_voltage(rt_adc_device_t dev, rt_uint32_t channel)
     if (dev->ops->get_resolution != RT_NULL && dev->ops->convert != RT_NULL)
     {
         /*get vref*/
-//       _adc_control((rt_device_t)dev, RT_ADC_CMD_GET_VREF, RT_NULL);
+        vref = _adc_control((rt_device_t)dev, RT_ADC_CMD_GET_VREF, RT_NULL);
 
         /*get the convert bits*/
         rt_uint8_t resolution = dev->ops->get_resolution(dev);
         dev->ops->convert(dev, channel, &value);
-        voltage = value * REFER_VOLTAGE / (1 << resolution);
+        voltage = value * vref / (1 << resolution);
     }
 
     return voltage;
@@ -254,7 +253,7 @@ static int adc(int argc, char **argv)
                 {
                     voltage = rt_adc_voltage(adc_device, atoi(argv[2]));
                     result_str = (result == RT_EOK) ? "success" : "failure";
-                    rt_kprintf("%s channel %d voltage is %d.%02d \n", adc_device->parent.parent.name, atoi(argv[2]), voltage / 100, voltage % 100);
+                    rt_kprintf("%s channel %d voltage is %d.%03d \n", adc_device->parent.parent.name, atoi(argv[2]), voltage / 1000, voltage % 1000);
                 }
                 else
                 {
